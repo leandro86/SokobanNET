@@ -10,7 +10,7 @@ namespace SokobanNET
         private Sokoban _sokoban;
 
         private readonly int _cellSize = Properties.Resources.Wall.Width;
-        private int _currentLevel = 1;
+        private int _currentLevel;
 
         private readonly int _defaultFormWidth;
         private readonly int _defaultFormHeight;
@@ -34,11 +34,11 @@ namespace SokobanNET
         private void MainForm_Load(object sender, EventArgs e)
         {
             _levels = new LevelCollection("Levels\\Original.slc");
-            
+
             _sokoban = new Sokoban();
             _sokoban.LevelCompleted += new EventHandler(sokoban_LevelCompleted);    
 
-            ChangeLevel(_currentLevel);
+            GoToLevel(++_currentLevel);
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -47,7 +47,7 @@ namespace SokobanNET
             {
                 if (e.KeyCode == Keys.Enter)
                 {
-                    ChangeLevel(++_currentLevel);
+                    GoToLevel(++_currentLevel);
                 }
             }
             else
@@ -68,7 +68,7 @@ namespace SokobanNET
                         break;
                     case Keys.Space:
                         // for testing...
-                        ChangeLevel(++_currentLevel);
+                        GoToLevel(++_currentLevel);
                         break;
                     case Keys.Back:
                         UndoMovement();
@@ -120,12 +120,12 @@ namespace SokobanNET
             statusBarLabel.Text = "Level Completed! Press enter to go to the next level...";
         }
 
-        private void ChangeLevel(int levelIndex)
+        private void GoToLevel(int levelNumber)
         {
-            _sokoban.LoadLevel(_levels[levelIndex]);
+            _sokoban.LoadLevel(_levels[levelNumber]);
             
-            drawingArea.Width = _levels[levelIndex].Width * _cellSize;
-            drawingArea.Height = _levels[levelIndex].Height * _cellSize;
+            drawingArea.Width = _levels[levelNumber].Width * _cellSize;
+            drawingArea.Height = _levels[levelNumber].Height * _cellSize;
 
             // some code to resize the form to fit the level size, and also to center the level in the form
             int formNewWidth = drawingArea.Width > _defaultBackgroundPanelWidth
@@ -149,7 +149,7 @@ namespace SokobanNET
 
         private void restartMenuItem_Click(object sender, EventArgs e)
         {
-            ChangeLevel(_currentLevel);
+            GoToLevel(_currentLevel);
         }
 
         private void exitMenuItem_Click(object sender, EventArgs e)
@@ -166,6 +166,18 @@ namespace SokobanNET
         {
             _sokoban.UndoMovement();
             drawingArea.Invalidate();
+        }
+
+        private void changeLevelMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeLevelForm changeLevelForm = new ChangeLevelForm();
+            if (changeLevelForm.ShowDialog() == DialogResult.OK)
+            {
+                _levels = changeLevelForm.SelectedCollection;
+                _currentLevel = changeLevelForm.SelectedLevel;
+            }
+
+            GoToLevel(_currentLevel);
         }
     }
 }

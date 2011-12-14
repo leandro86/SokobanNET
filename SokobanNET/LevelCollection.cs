@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -6,15 +6,20 @@ namespace SokobanNET
 {
     public class LevelCollection
     {
+        public string Title { get; private set; }
+        public string Description { get; private set; }
+        public string Copyright { get; private set; }
+        public int NumberOfLevels { get; private set; }
+        
         private XDocument _levelsFile;
         private Level[] _levels;
-        
+
         public LevelCollection(string fileName)
         {
-            LoadLevels(fileName);
+            LoadCollection(fileName);
         }
 
-        public void LoadLevels(string fileName)
+        public void LoadCollection(string fileName)
         {
             try
             {
@@ -26,34 +31,39 @@ namespace SokobanNET
                 throw new Exception("File doesn't exist");
             }
 
-            var levels = from level in _levelsFile.Descendants("Level")
-                         select level.Descendants("L");
-
-            _levels = new Level[levels.Count()];
-
-            int levelNumber = 0;
-            foreach (var level in levels)
-            {
-                int width = (from row in level
-                             select row.Value.Length).Max();
-                int height = level.Count();
-                
-                string[] levelData = new string[height];
-                int rowNumber = 0;
-                foreach (var row in level)
-                {
-                    levelData[rowNumber] += row.Value;
-                    rowNumber++;
-                }
-
-                _levels[levelNumber] = new Level() {Data = levelData, Width = width, Height = height};
-                levelNumber++;
-            }
+            Title = _levelsFile.Root.Element("Title").Value;
+            Description = _levelsFile.Root.Element("Description").Value.Trim();
+            Copyright = _levelsFile.Root.Element("LevelCollection").Attribute("Copyright").Value;
+            NumberOfLevels = _levelsFile.Descendants("Level").Count();
         }
 
-        public Level this[int i]
+        public Level this[int levelNumber]
         {
-            get { return _levels[i]; }
+            get { return GetLevel(levelNumber); }
+        }
+
+        private Level GetLevel(int levelNumber)
+        {
+            var level = _levelsFile.Descendants("Level").Skip(levelNumber - 1).First().Elements();
+
+            int levelWidth = (from row in level
+                              select row.Value.Length).Max();
+            int levelHeight = level.Count();
+
+            string[] levelData = new string[levelHeight];
+            int rowNumber = 0;
+            foreach (var row in level)
+            {
+                levelData[rowNumber] += row.Value;
+                rowNumber++;
+            }
+
+            return new Level() { Data = levelData, Width = levelWidth, Height = levelHeight };
+        }
+
+        public override string ToString()
+        {
+            return Title;
         }
     }
 }

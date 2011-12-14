@@ -32,16 +32,15 @@
             this.statusBarLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeLevelMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.restartMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.loadLevelsCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.backgroundPanel = new System.Windows.Forms.Panel();
-            this.drawingArea = new System.Windows.Forms.PictureBox();
-            this.goToLevelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.backgroundPanel = new System.Windows.Forms.Panel();
+            this.drawingArea = new System.Windows.Forms.PictureBox();
             this.statusBar.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.backgroundPanel.SuspendLayout();
@@ -79,31 +78,53 @@
             // gameToolStripMenuItem
             // 
             this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeLevelMenuItem,
             this.restartMenuItem,
-            this.goToLevelToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.loadLevelsCollectionToolStripMenuItem});
+            this.toolStripSeparator1});
             this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
             this.gameToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.gameToolStripMenuItem.Text = "Game";
             // 
+            // changeLevelMenuItem
+            // 
+            this.changeLevelMenuItem.Name = "changeLevelMenuItem";
+            this.changeLevelMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.changeLevelMenuItem.Text = "Change Level";
+            this.changeLevelMenuItem.Click += new System.EventHandler(this.changeLevelMenuItem_Click);
+            // 
             // restartMenuItem
             // 
             this.restartMenuItem.Name = "restartMenuItem";
-            this.restartMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.restartMenuItem.Text = "Restart";
+            this.restartMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.restartMenuItem.Text = "Restart Level";
             this.restartMenuItem.Click += new System.EventHandler(this.restartMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(154, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
-            // loadLevelsCollectionToolStripMenuItem
+            // editToolStripMenuItem
             // 
-            this.loadLevelsCollectionToolStripMenuItem.Name = "loadLevelsCollectionToolStripMenuItem";
-            this.loadLevelsCollectionToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.loadLevelsCollectionToolStripMenuItem.Text = "Load Collection";
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.undoMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "Edit";
+            // 
+            // undoMenuItem
+            // 
+            this.undoMenuItem.Name = "undoMenuItem";
+            this.undoMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.undoMenuItem.Text = "Undo Move";
+            this.undoMenuItem.Click += new System.EventHandler(this.undoMenuItem_Click);
+            // 
+            // exitMenuItem
+            // 
+            this.exitMenuItem.Name = "exitMenuItem";
+            this.exitMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.exitMenuItem.Text = "Exit";
+            this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -134,34 +155,6 @@
             this.drawingArea.TabStop = false;
             this.drawingArea.Paint += new System.Windows.Forms.PaintEventHandler(this.drawingArea_Paint);
             // 
-            // goToLevelToolStripMenuItem
-            // 
-            this.goToLevelToolStripMenuItem.Name = "goToLevelToolStripMenuItem";
-            this.goToLevelToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.goToLevelToolStripMenuItem.Text = "Go To Level";
-            // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.undoMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "Edit";
-            // 
-            // undoMenuItem
-            // 
-            this.undoMenuItem.Name = "undoMenuItem";
-            this.undoMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.undoMenuItem.Text = "Undo";
-            this.undoMenuItem.Click += new System.EventHandler(this.undoMenuItem_Click);
-            // 
-            // exitMenuItem
-            // 
-            this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.exitMenuItem.Text = "Exit";
-            this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -172,7 +165,7 @@
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mainMenu);
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "SokobanNET";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.statusBar.ResumeLayout(false);
@@ -197,8 +190,7 @@
         private System.Windows.Forms.ToolStripMenuItem gameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem restartMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem loadLevelsCollectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem goToLevelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeLevelMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;

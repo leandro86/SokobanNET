@@ -80,6 +80,9 @@ namespace SokobanNET
             Width = level.Width;
             Height = level.Height;
 
+            _goalsCount = 0;
+            _goalsFilled = 0;
+
             _level = new Element[level.Data.Length][];
             for (int i = 0; i < level.Data.Length; i++)
             {
@@ -100,6 +103,8 @@ namespace SokobanNET
                     }
                 }
             }
+
+            _movesHistory.Clear();
         }
 
         public void MovePlayer(MoveDirection moveDirection)
