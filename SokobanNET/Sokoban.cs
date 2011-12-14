@@ -8,6 +8,7 @@ namespace SokobanNET
     {
         public int Width { get; private set; }
         public int Height { get; private set; }
+
         public enum Element
         {
             EndRow,
@@ -19,6 +20,7 @@ namespace SokobanNET
             BoxOnGoal = '*',
             PlayerOnGoal = '+'
         }
+
         public enum MoveDirection
         {
             Up,
@@ -39,6 +41,7 @@ namespace SokobanNET
         private int _goalsFilled;
 
         private static Dictionary<string, string> _moves;
+        private Stack<List<Tuple<Element, int, int>>> _movesHistory;
         
         public Sokoban(Level level)
         {
@@ -47,6 +50,7 @@ namespace SokobanNET
 
         public Sokoban()
         {
+            _movesHistory = new Stack<List<Tuple<Element, int, int>>>();
         }
 
         static Sokoban()
@@ -144,19 +148,29 @@ namespace SokobanNET
             // if there's no key in the movement's hashtable, i know it's not a valid move
             if (_moves.ContainsKey(moveInput))
             {
+                /* i save in the stack the elements (with the positions) that are going to be affected by the
+                 * move, so i can go back to this previous state if i do an undo action */
+                List<Tuple<Element, int, int>> elementsList = new List<Tuple<Element, int, int>>();
+                elementsList.Add(new Tuple<Element, int, int>((Element)moveInput[0], _playerY, _playerX));
+                elementsList.Add(new Tuple<Element, int, int>((Element)moveInput[1], newPlayerY, newPlayerX));
+                
                 string moveOutput = _moves[moveInput];
                 
                 /* the first char in the value associated with the key tells me what element i need to put in the
                  * current player's position, since the player is moving. The next char tells me the element that goes
                  * in the position i want to move, and it's going to be a Player or a PlayerOnGoal. The last char, 
-                 * represents what happen when i move a box: is still a Box or a BoxOnGoal? */
+                 * represents what happen when i move a box: is it still a Box or now it's a BoxOnGoal? */
                 _level[_playerY][_playerX] = (Element)(moveOutput[0]);
                 _level[newPlayerY][newPlayerX] = (Element)(moveOutput[1]);    
 
                 if (moveOutput.Length == 3)
                 {
-                    _level[posAheadY][posAheadX] = (Element)(moveOutput[2]);        
+                    _level[posAheadY][posAheadX] = (Element)(moveOutput[2]);
+                    // if the move affected three cells, then i need to save this element too
+                    elementsList.Add(new Tuple<Element, int, int>((Element)moveInput[2], posAheadY, posAheadX));
                 }
+
+                _movesHistory.Push(elementsList);
 
                 _playerX = newPlayerX;
                 _playerY = newPlayerY;
@@ -176,6 +190,23 @@ namespace SokobanNET
                 {
                     _goalsFilled--;
                 }
+            }
+        }
+
+        public void UndoMovement()
+        {
+            if (_movesHistory.Count > 0)
+            {
+                List<Tuple<Element, int, int>> elementsList = _movesHistory.Pop();
+
+                foreach (var element in elementsList)
+                {
+                    _level[element.Item2][element.Item3] = element.Item1;
+                }
+
+                // the first element in the list is going to contain always the player information
+                _playerX = elementsList[0].Item3;
+                _playerY = elementsList[0].Item2;
             }
         }
 

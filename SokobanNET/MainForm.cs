@@ -10,7 +10,7 @@ namespace SokobanNET
         private Sokoban _sokoban;
 
         private readonly int _cellSize = Properties.Resources.Wall.Width;
-        private int _currentLevel = 0;
+        private int _currentLevel = 1;
 
         private readonly int _defaultFormWidth;
         private readonly int _defaultFormHeight;
@@ -70,6 +70,9 @@ namespace SokobanNET
                         // for testing...
                         ChangeLevel(++_currentLevel);
                         break;
+                    case Keys.Back:
+                        UndoMovement();
+                        break;
                 }
                 drawingArea.Invalidate();
             }
@@ -114,7 +117,7 @@ namespace SokobanNET
             drawingArea.Invalidate();
 
             _isLevelComplete = true;
-            statusBarLabel.Text = "Level Completed! Press enter to go to the next level";
+            statusBarLabel.Text = "Level Completed! Press enter to go to the next level...";
         }
 
         private void ChangeLevel(int levelIndex)
@@ -136,11 +139,33 @@ namespace SokobanNET
 
             int x = backgroundPanel.Size.Width / 2 - drawingArea.Size.Width / 2;
             int y = backgroundPanel.Size.Height / 2 - drawingArea.Size.Height / 2;
-
             drawingArea.Location = new Point(x, y);
 
             _isLevelComplete = false;
             statusBarLabel.Text = "";
+
+            drawingArea.Invalidate();
+        }
+
+        private void restartMenuItem_Click(object sender, EventArgs e)
+        {
+            ChangeLevel(_currentLevel);
+        }
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void undoMenuItem_Click(object sender, EventArgs e)
+        {
+            UndoMovement();
+        }
+
+        private void UndoMovement()
+        {
+            _sokoban.UndoMovement();
+            drawingArea.Invalidate();
         }
     }
 }
