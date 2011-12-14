@@ -28,22 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusBar = new System.Windows.Forms.StatusStrip();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.backgroundPanel = new System.Windows.Forms.Panel();
             this.drawingArea = new System.Windows.Forms.PictureBox();
+            this.statusBarLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusBar.SuspendLayout();
             this.backgroundPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.drawingArea)).BeginInit();
             this.SuspendLayout();
             // 
-            // statusStrip1
+            // statusBar
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 482);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(649, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusBar";
+            this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusBarLabel});
+            this.statusBar.Location = new System.Drawing.Point(0, 482);
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(649, 22);
+            this.statusBar.TabIndex = 1;
+            this.statusBar.Text = "statusBar";
             // 
             // menuStrip2
             // 
@@ -82,6 +86,12 @@
             this.drawingArea.TabStop = false;
             this.drawingArea.Paint += new System.Windows.Forms.PaintEventHandler(this.drawingArea_Paint);
             // 
+            // statusBarLabel
+            // 
+            this.statusBarLabel.Name = "statusBarLabel";
+            this.statusBarLabel.Size = new System.Drawing.Size(118, 17);
+            this.statusBarLabel.Text = "toolStripStatusLabel1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,12 +99,14 @@
             this.ClientSize = new System.Drawing.Size(649, 504);
             this.Controls.Add(this.backgroundPanel);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.menuStrip2);
             this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.statusBar.ResumeLayout(false);
+            this.statusBar.PerformLayout();
             this.backgroundPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.drawingArea)).EndInit();
             this.ResumeLayout(false);
@@ -104,11 +116,12 @@
 
         #endregion
 
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.MenuStrip menuStrip2;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Panel backgroundPanel;
         private System.Windows.Forms.PictureBox drawingArea;
+        private System.Windows.Forms.ToolStripStatusLabel statusBarLabel;
     }
 }
 
