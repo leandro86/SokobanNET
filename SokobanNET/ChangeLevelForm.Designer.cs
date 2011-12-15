@@ -28,44 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.levelsCollectionList = new System.Windows.Forms.ListBox();
-            this.levelsList = new System.Windows.Forms.ListBox();
             this.levelCollectionDescriptionText = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.levelCollectionGrid = new System.Windows.Forms.DataGridView();
+            this.levelsGrid = new System.Windows.Forms.DataGridView();
+            this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.copyright = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levels = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.levelCollectionGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.levelsGrid)).BeginInit();
             this.SuspendLayout();
-            // 
-            // levelsCollectionList
-            // 
-            this.levelsCollectionList.FormattingEnabled = true;
-            this.levelsCollectionList.Location = new System.Drawing.Point(12, 12);
-            this.levelsCollectionList.Name = "levelsCollectionList";
-            this.levelsCollectionList.Size = new System.Drawing.Size(238, 264);
-            this.levelsCollectionList.TabIndex = 0;
-            this.levelsCollectionList.SelectedIndexChanged += new System.EventHandler(this.levelsCollectionList_SelectedIndexChanged);
-            // 
-            // levelsList
-            // 
-            this.levelsList.FormattingEnabled = true;
-            this.levelsList.Location = new System.Drawing.Point(256, 12);
-            this.levelsList.Name = "levelsList";
-            this.levelsList.Size = new System.Drawing.Size(139, 264);
-            this.levelsList.TabIndex = 1;
-            this.levelsList.SelectedIndexChanged += new System.EventHandler(this.levelsList_SelectedIndexChanged);
             // 
             // levelCollectionDescriptionText
             // 
             this.levelCollectionDescriptionText.Location = new System.Drawing.Point(12, 282);
             this.levelCollectionDescriptionText.Name = "levelCollectionDescriptionText";
             this.levelCollectionDescriptionText.ReadOnly = true;
-            this.levelCollectionDescriptionText.Size = new System.Drawing.Size(383, 69);
+            this.levelCollectionDescriptionText.Size = new System.Drawing.Size(562, 69);
             this.levelCollectionDescriptionText.TabIndex = 2;
             this.levelCollectionDescriptionText.Text = "";
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(239, 356);
+            this.button1.Location = new System.Drawing.Point(418, 356);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 3;
@@ -75,36 +64,122 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.Location = new System.Drawing.Point(320, 356);
+            this.button2.Location = new System.Drawing.Point(499, 356);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 4;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // levelCollectionGrid
+            // 
+            this.levelCollectionGrid.AllowUserToAddRows = false;
+            this.levelCollectionGrid.AllowUserToDeleteRows = false;
+            this.levelCollectionGrid.AllowUserToResizeRows = false;
+            this.levelCollectionGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.levelCollectionGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.levelCollectionGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.title,
+            this.copyright,
+            this.levels});
+            this.levelCollectionGrid.Location = new System.Drawing.Point(12, 12);
+            this.levelCollectionGrid.MultiSelect = false;
+            this.levelCollectionGrid.Name = "levelCollectionGrid";
+            this.levelCollectionGrid.ReadOnly = true;
+            this.levelCollectionGrid.RowHeadersVisible = false;
+            this.levelCollectionGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.levelCollectionGrid.Size = new System.Drawing.Size(402, 264);
+            this.levelCollectionGrid.TabIndex = 5;
+            this.levelCollectionGrid.SelectionChanged += new System.EventHandler(this.levelCollectionGrid_SelectionChanged);
+            // 
+            // levelsGrid
+            // 
+            this.levelsGrid.AllowUserToAddRows = false;
+            this.levelsGrid.AllowUserToDeleteRows = false;
+            this.levelsGrid.AllowUserToResizeRows = false;
+            this.levelsGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.levelsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.levelsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.Column4});
+            this.levelsGrid.Location = new System.Drawing.Point(420, 12);
+            this.levelsGrid.MultiSelect = false;
+            this.levelsGrid.Name = "levelsGrid";
+            this.levelsGrid.ReadOnly = true;
+            this.levelsGrid.RowHeadersVisible = false;
+            this.levelsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.levelsGrid.Size = new System.Drawing.Size(154, 264);
+            this.levelsGrid.TabIndex = 6;
+            this.levelsGrid.SelectionChanged += new System.EventHandler(this.levelsGrid_SelectionChanged);
+            // 
+            // title
+            // 
+            this.title.HeaderText = "Title";
+            this.title.Name = "title";
+            this.title.ReadOnly = true;
+            this.title.Width = 170;
+            // 
+            // copyright
+            // 
+            this.copyright.HeaderText = "Copyright";
+            this.copyright.Name = "copyright";
+            this.copyright.ReadOnly = true;
+            this.copyright.Width = 165;
+            // 
+            // levels
+            // 
+            this.levels.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.levels.HeaderText = "Levels";
+            this.levels.Name = "levels";
+            this.levels.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.FillWeight = 149.2386F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Level";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 70;
+            // 
+            // Column4
+            // 
+            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column4.FillWeight = 50.76142F;
+            this.Column4.HeaderText = "Completed";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
             // ChangeLevelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 391);
+            this.ClientSize = new System.Drawing.Size(587, 390);
+            this.Controls.Add(this.levelsGrid);
+            this.Controls.Add(this.levelCollectionGrid);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.levelCollectionDescriptionText);
-            this.Controls.Add(this.levelsList);
-            this.Controls.Add(this.levelsCollectionList);
             this.Name = "ChangeLevelForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ChangeLevelForm";
             this.Load += new System.EventHandler(this.ChangeLevelForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.levelCollectionGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.levelsGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListBox levelsCollectionList;
-        private System.Windows.Forms.ListBox levelsList;
         private System.Windows.Forms.RichTextBox levelCollectionDescriptionText;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridView levelCollectionGrid;
+        private System.Windows.Forms.DataGridView levelsGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn copyright;
+        private System.Windows.Forms.DataGridViewTextBoxColumn levels;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }

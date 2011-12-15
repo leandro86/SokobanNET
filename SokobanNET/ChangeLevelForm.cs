@@ -18,37 +18,44 @@ namespace SokobanNET
         public ChangeLevelForm()
         {
             InitializeComponent();
+
+            levelCollectionGrid.AutoGenerateColumns = false;
         }
 
         private void ChangeLevelForm_Load(object sender, EventArgs e)
         {
             string[] files = Directory.GetFiles("Levels");
+            List<LevelCollection> levels = new List<LevelCollection>();
 
             foreach (string file in files)
             {
-                LevelCollection levelCollection = new LevelCollection(file);
-                levelsCollectionList.Items.Add(levelCollection);
-
-                levelCollectionDescriptionText.Text = levelCollection.Description;
+                levels.Add(new LevelCollection(file));
             }
+
+            levelCollectionGrid.DataSource = levels;
+            
+            levelCollectionGrid.Columns["title"].DataPropertyName = "Title";
+            levelCollectionGrid.Columns["copyright"].DataPropertyName = "Copyright";
+            levelCollectionGrid.Columns["levels"].DataPropertyName = "NumberOfLevels";
         }
 
-        private void levelsCollectionList_SelectedIndexChanged(object sender, EventArgs e)
+        private void levelCollectionGrid_SelectionChanged(object sender, EventArgs e)
         {
-            LevelCollection selectedLevelCollection = (LevelCollection)levelsCollectionList.SelectedItem;
-            levelsList.Items.Clear();
+            LevelCollection selectedLevelCollection = (LevelCollection)levelCollectionGrid.CurrentRow.DataBoundItem;
+            levelsGrid.Rows.Clear();
 
             for (int i = 1; i <= selectedLevelCollection.NumberOfLevels; i++)
             {
-                levelsList.Items.Add("Level " + i);
+                levelsGrid.Rows.Add("Level " + i);
             }
 
             SelectedCollection = selectedLevelCollection;
+            levelCollectionDescriptionText.Text = selectedLevelCollection.Description;
         }
 
-        private void levelsList_SelectedIndexChanged(object sender, EventArgs e)
+        private void levelsGrid_SelectionChanged(object sender, EventArgs e)
         {
-            SelectedLevel = levelsList.SelectedIndex + 1;
+            SelectedLevel = levelsGrid.CurrentRow.Index + 1;
         }
     }
 }

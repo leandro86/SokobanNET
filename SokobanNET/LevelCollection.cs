@@ -60,10 +60,5 @@ namespace SokobanNET
 
             return new Level() { Data = levelData, Width = levelWidth, Height = levelHeight };
         }
-
-        public override string ToString()
-        {
-            return Title;
-        }
     }
 }

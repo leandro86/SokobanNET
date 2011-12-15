@@ -71,7 +71,8 @@ namespace SokobanNET
                              {"+*.", ".+*"},
                              {"+* ", ".+$"},
                              {"+$ ", ".@$"},
-                             {"+$.", ".@*"}
+                             {"+$.", ".@*"},
+                             {"@* ", " +$"}
                          };
         }
 
@@ -100,6 +101,11 @@ namespace SokobanNET
                     else if (_level[i][j] == Element.Goal)
                     {
                         _goalsCount++;
+                    }
+                    else if (_level[i][j] == Element.BoxOnGoal)
+                    {
+                        _goalsCount++;
+                        _goalsFilled++;
                     }
                 }
             }

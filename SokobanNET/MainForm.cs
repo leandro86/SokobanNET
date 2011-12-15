@@ -33,12 +33,10 @@ namespace SokobanNET
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            _levels = new LevelCollection("Levels\\Original.slc");
-
             _sokoban = new Sokoban();
-            _sokoban.LevelCompleted += new EventHandler(sokoban_LevelCompleted);    
+            _sokoban.LevelCompleted += new EventHandler(sokoban_LevelCompleted);
 
-            GoToLevel(++_currentLevel);
+            //GoToLevel(++_currentLevel);
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -80,35 +78,38 @@ namespace SokobanNET
 
         private void drawingArea_Paint(object sender, PaintEventArgs e)
         {
-            int y = 0;
-            int x = 0;
-            foreach (Sokoban.Element element in _sokoban)
+            if (_levels != null)
             {
-                switch (element)
+                int y = 0;
+                int x = 0;
+                foreach (Sokoban.Element element in _sokoban)
                 {
-                    case Sokoban.Element.Wall:
-                        e.Graphics.DrawImage(Properties.Resources.Wall, x * _cellSize, y * _cellSize);
-                        break;
-                    case Sokoban.Element.Box:
-                    case Sokoban.Element.BoxOnGoal:
-                        e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize);
-                        break;
-                    case Sokoban.Element.Goal:
-                        e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
-                        break;
-                    case Sokoban.Element.Player:
-                        e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
-                        break;
-                    case Sokoban.Element.PlayerOnGoal:
-                        e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
-                        e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
-                        break;
-                    case Sokoban.Element.EndRow:
-                        x = -1;
-                        y++;
-                        break;
+                    switch (element)
+                    {
+                        case Sokoban.Element.Wall:
+                            e.Graphics.DrawImage(Properties.Resources.Wall, x * _cellSize, y * _cellSize);
+                            break;
+                        case Sokoban.Element.Box:
+                        case Sokoban.Element.BoxOnGoal:
+                            e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize);
+                            break;
+                        case Sokoban.Element.Goal:
+                            e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
+                            break;
+                        case Sokoban.Element.Player:
+                            e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
+                            break;
+                        case Sokoban.Element.PlayerOnGoal:
+                            e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
+                            e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
+                            break;
+                        case Sokoban.Element.EndRow:
+                            x = -1;
+                            y++;
+                            break;
+                    }
+                    x++;
                 }
-                x++;
             }
         }
 
@@ -129,13 +130,14 @@ namespace SokobanNET
 
             // some code to resize the form to fit the level size, and also to center the level in the form
             int formNewWidth = drawingArea.Width > _defaultBackgroundPanelWidth
-                                   ? _defaultFormWidth + drawingArea.Width - _defaultBackgroundPanelWidth
+                                   ? _defaultFormWidth + drawingArea.Width - _defaultBackgroundPanelWidth + 10
                                    : _defaultFormWidth;
             int formNewHeight = drawingArea.Height > _defaultBackgroundPanelHeight
-                                    ? _defaultFormHeight + drawingArea.Height - _defaultBackgroundPanelHeight
+                                    ? _defaultFormHeight + drawingArea.Height - _defaultBackgroundPanelHeight + 10
                                     : _defaultFormHeight;
 
-            Size = new Size(formNewWidth + 10, formNewHeight + 10);
+            Size = new Size(formNewWidth, formNewHeight);
+            CenterToScreen();
 
             int x = backgroundPanel.Size.Width / 2 - drawingArea.Size.Width / 2;
             int y = backgroundPanel.Size.Height / 2 - drawingArea.Size.Height / 2;
@@ -175,9 +177,11 @@ namespace SokobanNET
             {
                 _levels = changeLevelForm.SelectedCollection;
                 _currentLevel = changeLevelForm.SelectedLevel;
-            }
 
-            GoToLevel(_currentLevel);
+                GoToLevel(_currentLevel);
+
+                drawingArea.Visible = true;
+            }
         }
     }
 }
