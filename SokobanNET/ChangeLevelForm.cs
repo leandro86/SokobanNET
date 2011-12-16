@@ -14,11 +14,15 @@ namespace SokobanNET
     {
         public LevelCollection SelectedCollection { get; private set; }
         public int SelectedLevel { get; private set; }
-        
+
+        private Sokoban _sokoban;
+        private int _cellSize;
+
         public ChangeLevelForm()
         {
             InitializeComponent();
 
+            _sokoban = new Sokoban();
             levelCollectionGrid.AutoGenerateColumns = false;
         }
 
@@ -56,6 +60,44 @@ namespace SokobanNET
         private void levelsGrid_SelectionChanged(object sender, EventArgs e)
         {
             SelectedLevel = levelsGrid.CurrentRow.Index + 1;
+
+            LevelCollection selectedLevelCollection = (LevelCollection)levelCollectionGrid.CurrentRow.DataBoundItem;
+            _sokoban.LoadLevel(selectedLevelCollection[SelectedLevel - 1]);
+
+            _cellSize = levelPreview.Width / Math.Max(_sokoban.Width, _sokoban.Height);
+
+            levelPreview.Invalidate();
+        }
+
+        private void levelPreview_Paint(object sender, PaintEventArgs e)
+        {           
+            int y = 0;
+            int x = 0;
+            foreach (Sokoban.Element element in _sokoban)
+            {
+                switch (element)
+                {
+                    case Sokoban.Element.Wall:
+                        e.Graphics.DrawImage(Properties.Resources.Wall, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+                        break;
+                    case Sokoban.Element.Box:
+                    case Sokoban.Element.BoxOnGoal:
+                        e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize, _cellSize, _cellSize);  
+                        break;
+                    case Sokoban.Element.Goal:
+                        e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+                        break;
+                    case Sokoban.Element.Player:
+                    case Sokoban.Element.PlayerOnGoal:
+                        e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+                        break;
+                    case Sokoban.Element.EndRow:
+                        x = -1;
+                        y++;
+                        break;
+                }
+                x++;
+            }
         }
     }
 }
