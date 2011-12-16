@@ -91,16 +91,13 @@ namespace SokobanNET
                             break;
                         case Sokoban.Element.Box:
                         case Sokoban.Element.BoxOnGoal:
-                            e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize);
+                            e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize);  
                             break;
                         case Sokoban.Element.Goal:
                             e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
                             break;
                         case Sokoban.Element.Player:
-                            e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
-                            break;
                         case Sokoban.Element.PlayerOnGoal:
-                            e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
                             e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
                             break;
                         case Sokoban.Element.EndRow:
@@ -137,7 +134,7 @@ namespace SokobanNET
                                     : _defaultFormHeight;
 
             Size = new Size(formNewWidth, formNewHeight);
-            CenterToScreen();
+            //CenterToScreen();
 
             int x = backgroundPanel.Size.Width / 2 - drawingArea.Size.Width / 2;
             int y = backgroundPanel.Size.Height / 2 - drawingArea.Size.Height / 2;
