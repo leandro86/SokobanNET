@@ -52,6 +52,8 @@
     <Compile Include="ChangeLevelForm.Designer.cs">
       <DependentUpon>ChangeLevelForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Element.cs" />
+    <Compile Include="ElementType.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="LevelCollection.cs" />
     <Compile Include="MainForm.cs">

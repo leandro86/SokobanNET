@@ -44,7 +44,7 @@ namespace SokobanNET
 
         private Level GetLevel(int levelNumber)
         {
-            var level = _levelsFile.Descendants("Level").Skip(levelNumber - 1).First().Elements();
+            var level = _levelsFile.Descendants("Level").Skip(levelNumber).First().Elements();
 
             int levelWidth = (from row in level
                               select row.Value.Length).Max();

@@ -9,18 +9,6 @@ namespace SokobanNET
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public enum Element
-        {
-            EndRow,
-            Player = '@',
-            Wall = '#',
-            Floor = ' ',
-            Goal = '.',
-            Box = '$',
-            BoxOnGoal = '*',
-            PlayerOnGoal = '+'
-        }
-
         public enum MoveDirection
         {
             Up,
@@ -32,15 +20,12 @@ namespace SokobanNET
         public event EventHandler LevelCompleted;
         
         private Element[][] _level;
-
-        // this variables always keep track of the current player's position
-        private int _playerX;
-        private int _playerY;
-
+        private Element _player;
+        
         private int _goalsCount;
         private int _goalsFilled;
 
-        private Stack<List<Tuple<Element, int, int>>> _movesHistory;
+        private Stack<List<Element>> _movesHistory;
         
         public Sokoban(Level level)
         {
@@ -49,7 +34,7 @@ namespace SokobanNET
 
         public Sokoban()
         {
-            _movesHistory = new Stack<List<Tuple<Element, int, int>>>();
+            _movesHistory = new Stack<List<Element>>();
         }
 
         public void LoadLevel(Level level)
@@ -61,27 +46,42 @@ namespace SokobanNET
             _goalsFilled = 0;
 
             _level = new Element[level.Data.Length][];
-            for (int i = 0; i < level.Data.Length; i++)
+            for (int row = 0; row < level.Data.Length; row++)
             {
-                _level[i] = new Element[level.Data[i].Length];
+                _level[row] = new Element[level.Data[row].Length];
 
-                for (int j = 0; j < level.Data[i].Length; j++)
+                for (int column = 0; column < level.Data[row].Length; column++)
                 {
-                    _level[i][j] = (Element)level.Data[i][j];
+                    _level[row][column] = new Element() {Row = row, Column = column};
 
-                    if (_level[i][j] == Element.Player)
+                    switch (level.Data[row][column])
                     {
-                        _playerY = i;
-                        _playerX = j;
-                    }
-                    else if (_level[i][j] == Element.Goal)
-                    {
-                        _goalsCount++;
-                    }
-                    else if (_level[i][j] == Element.BoxOnGoal)
-                    {
-                        _goalsCount++;
-                        _goalsFilled++;
+                        case '@':
+                            _level[row][column].Type = ElementType.Player;
+                            _player = _level[row][column];
+                            break;
+                        case '+':
+                            _level[row][column].Type = ElementType.PlayerOnGoal;
+                            _player = _level[row][column];
+                            break;
+                        case '#':
+                            _level[row][column].Type = ElementType.Wall;
+                            break;
+                        case '$':
+                            _level[row][column].Type = ElementType.Box;
+                            break;
+                        case '*':
+                            _level[row][column].Type = ElementType.BoxOnGoal;
+                            _goalsCount++;
+                            _goalsFilled++;
+                            break;
+                        case '.':
+                            _level[row][column].Type = ElementType.Goal;
+                            _goalsCount++;
+                            break;
+                        case ' ':
+                            _level[row][column].Type = ElementType.Floor;
+                            break;
                     }
                 }
             }
@@ -91,72 +91,90 @@ namespace SokobanNET
 
         public void MovePlayer(MoveDirection moveDirection)
         {
-            int newPlayerX = _playerX;
-            int newPlayerY = _playerY;
-            int newBoxX = _playerX;
-            int newBoxY = _playerY;           
+            int newPlayerRow = _player.Row;
+            int newPlayerColumn = _player.Column;
+
+            int newBoxRow = newPlayerRow;
+            int newBoxColumn = newPlayerColumn;
 
             switch (moveDirection)
             {
                 case MoveDirection.Up:
-                    newPlayerY = _playerY - 1;
-                    newBoxY = newPlayerY - 1;
+                    newPlayerRow -= 1;
+                    newBoxRow -= 2;
                     break;
                 case MoveDirection.Down:
-                    newPlayerY = _playerY + 1;
-                    newBoxY = newPlayerY + 1;
+                    newPlayerRow += 1;
+                    newBoxRow += 2;
                     break;
                 case MoveDirection.Left:
-                    newPlayerX = _playerX - 1;
-                    newBoxX = newPlayerX - 1;
+                    newPlayerColumn -= 1;
+                    newBoxColumn -= 2;
                     break;
                 case MoveDirection.Right:
-                    newPlayerX = _playerX + 1;
-                    newBoxX = newPlayerX + 1;
+                    newPlayerColumn += 1;
+                    newBoxColumn += 2;
                     break;
             }
 
-            bool isThereAWall = _level[newPlayerY][newPlayerX] == Element.Wall;
-            bool isTryingToMoveABox = _level[newPlayerY][newPlayerX] == Element.Box ||
-                                      _level[newPlayerY][newPlayerX] == Element.BoxOnGoal;
-            bool canMoveBox = isTryingToMoveABox && (_level[newBoxY][newBoxX] == Element.Floor ||
-                                                     _level[newBoxY][newBoxX] == Element.Goal);
+            bool isThereAWall = _level[newPlayerRow][newPlayerColumn].Type == ElementType.Wall;
 
-            if (isThereAWall || (isTryingToMoveABox && !canMoveBox))
-            {
-                return;
-            }
-            else
-            {
-                List<Tuple<Element, int, int>> elementsList = new List<Tuple<Element, int, int>>();
-                elementsList.Add(new Tuple<Element, int, int>(_level[_playerY][_playerX], _playerY, _playerX));
-                elementsList.Add(new Tuple<Element, int, int>(_level[newPlayerY][newPlayerX], newPlayerY, newPlayerX));              
-                
-                _level[_playerY][_playerX] = _level[_playerY][_playerX] == Element.PlayerOnGoal
-                                                 ? Element.Goal
-                                                 : Element.Floor;
+            bool isTryingToMoveABox = _level[newPlayerRow][newPlayerColumn].Type == ElementType.Box ||
+                                      _level[newPlayerRow][newPlayerColumn].Type == ElementType.BoxOnGoal;
 
-                if (_level[newPlayerY][newPlayerX] == Element.Goal || _level[newPlayerY][newPlayerX] == Element.BoxOnGoal)
+            bool canMoveBox = isTryingToMoveABox && (_level[newBoxRow][newBoxColumn].Type == ElementType.Floor ||
+                                                     _level[newBoxRow][newBoxColumn].Type == ElementType.Goal);
+
+            if (!isThereAWall && !(isTryingToMoveABox && !canMoveBox))
+            {
+                List<Element> elementsList = new List<Element>()
+                                                 {
+                                                     new Element()
+                                                         {
+                                                             Type = _level[_player.Row][_player.Column].Type,
+                                                             Row = _player.Row,
+                                                             Column = _player.Column
+                                                         },
+                                                     new Element()
+                                                         {
+                                                             Type = _level[newPlayerRow][newPlayerColumn].Type,
+                                                             Row = newPlayerRow,
+                                                             Column = newPlayerColumn
+                                                         }
+                                                 };
+
+                _level[_player.Row][_player.Column].Type = _level[_player.Row][_player.Column].Type ==
+                                                           ElementType.PlayerOnGoal
+                                                               ? ElementType.Goal
+                                                               : ElementType.Floor;
+
+                if (_level[newPlayerRow][newPlayerColumn].Type == ElementType.Goal ||
+                    _level[newPlayerRow][newPlayerColumn].Type == ElementType.BoxOnGoal)
                 {
-                    if (_level[newPlayerY][newPlayerX] == Element.BoxOnGoal)
+                    if (_level[newPlayerRow][newPlayerColumn].Type == ElementType.BoxOnGoal)
                     {
                         _goalsFilled--;
                     }
 
-                    _level[newPlayerY][newPlayerX] = Element.PlayerOnGoal;
+                    _level[newPlayerRow][newPlayerColumn].Type = ElementType.PlayerOnGoal;
                 }
                 else
                 {
-                    _level[newPlayerY][newPlayerX] = Element.Player;
+                    _level[newPlayerRow][newPlayerColumn].Type = ElementType.Player;
                 }
 
                 if (isTryingToMoveABox)
                 {
-                    elementsList.Add(new Tuple<Element, int, int>(_level[newBoxY][newBoxX], newBoxY, newBoxX));
+                    elementsList.Add(new Element()
+                                         {
+                                             Type = _level[newBoxRow][newBoxColumn].Type,
+                                             Row = newBoxRow,
+                                             Column = newBoxColumn
+                                         });
 
-                    if (_level[newBoxY][newBoxX] == Element.Goal)
+                    if (_level[newBoxRow][newBoxColumn].Type == ElementType.Goal)
                     {
-                        _level[newBoxY][newBoxX] = Element.BoxOnGoal;
+                        _level[newBoxRow][newBoxColumn].Type = ElementType.BoxOnGoal;
                         _goalsFilled++;
 
                         if (_goalsFilled == _goalsCount && LevelCompleted != null)
@@ -166,14 +184,12 @@ namespace SokobanNET
                     }
                     else
                     {
-                        _level[newBoxY][newBoxX] = Element.Box;
+                        _level[newBoxRow][newBoxColumn].Type = ElementType.Box;
                     }
                 }
 
+                _player = _level[newPlayerRow][newPlayerColumn];
                 _movesHistory.Push(elementsList);
-
-                _playerY = newPlayerY;
-                _playerX = newPlayerX;
             }
         }
 
@@ -181,32 +197,25 @@ namespace SokobanNET
         {
             if (_movesHistory.Count > 0)
             {
-                List<Tuple<Element, int, int>> elementsList = _movesHistory.Pop();
+                List<Element> elementsList = _movesHistory.Pop();
 
                 foreach (var element in elementsList)
                 {
-                    _level[element.Item2][element.Item3] = element.Item1;
+                    _level[element.Row][element.Column].Type = element.Type;
                 }
 
-                // the first element in the list is going to contain always the player information
-                _playerX = elementsList[0].Item3;
-                _playerY = elementsList[0].Item2;
+                _player = elementsList[0];
             }
         }
 
         public IEnumerator GetEnumerator()
         {
-            for (int i = 0; i < _level.Length; i++)
+            foreach (Element[] row in _level)
             {
-                for (int j = 0; j < _level[i].Length; j++)
+                foreach (Element element in row)
                 {
-                    yield return _level[i][j];
+                    yield return element;
                 }
-                
-                /* the client needs to know where the current row ends, so he can increment y, and begin to
-                 * draw the next row. The alternative would be to return some kind of struct with the element type,
-                 * and the coordinates for drawing */
-                yield return Element.EndRow;
             }
         }
     }

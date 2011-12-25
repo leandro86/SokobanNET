@@ -86,14 +86,14 @@
             // changeLevelMenuItem
             // 
             this.changeLevelMenuItem.Name = "changeLevelMenuItem";
-            this.changeLevelMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.changeLevelMenuItem.Size = new System.Drawing.Size(145, 22);
             this.changeLevelMenuItem.Text = "Change Level";
             this.changeLevelMenuItem.Click += new System.EventHandler(this.changeLevelMenuItem_Click);
             // 
             // restartMenuItem
             // 
             this.restartMenuItem.Name = "restartMenuItem";
-            this.restartMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.restartMenuItem.Size = new System.Drawing.Size(145, 22);
             this.restartMenuItem.Text = "Restart Level";
             this.restartMenuItem.Click += new System.EventHandler(this.restartMenuItem_Click);
             // 

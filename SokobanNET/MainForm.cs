@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,7 +8,7 @@ namespace SokobanNET
 {
     public partial class MainForm : Form
     {
-        private LevelCollection _levels;
+        private LevelCollection _levelCollection;
         private Sokoban _sokoban;
 
         private readonly int _cellSize = Properties.Resources.Wall.Width;
@@ -78,34 +80,35 @@ namespace SokobanNET
 
         private void drawingArea_Paint(object sender, PaintEventArgs e)
         {
-            if (_levels != null)
+            if (_levelCollection != null)
             {
-                int y = 0;
-                int x = 0;
-                foreach (Sokoban.Element element in _sokoban)
+                foreach (Element element in _sokoban)
                 {
-                    switch (element)
+                    Bitmap imageToDraw = null;
+
+                    switch (element.Type)
                     {
-                        case Sokoban.Element.Wall:
-                            e.Graphics.DrawImage(Properties.Resources.Wall, x * _cellSize, y * _cellSize);
+                        case ElementType.Wall:
+                            imageToDraw = Properties.Resources.Wall;
                             break;
-                        case Sokoban.Element.Box:
-                        case Sokoban.Element.BoxOnGoal:
-                            e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize);  
+                        case ElementType.Box:
+                        case ElementType.BoxOnGoal:
+                            imageToDraw = Properties.Resources.Box;
                             break;
-                        case Sokoban.Element.Goal:
-                            e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize);
+                        case ElementType.Goal:
+                            imageToDraw = Properties.Resources.Goal;
                             break;
-                        case Sokoban.Element.Player:
-                        case Sokoban.Element.PlayerOnGoal:
-                            e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize);
-                            break;
-                        case Sokoban.Element.EndRow:
-                            x = -1;
-                            y++;
+                        case ElementType.Player:
+                        case ElementType.PlayerOnGoal:
+                            imageToDraw = Properties.Resources.Player;
                             break;
                     }
-                    x++;
+
+                    if (imageToDraw != null)
+                    {
+                        e.Graphics.DrawImage(imageToDraw, element.Column * _cellSize, element.Row * _cellSize, _cellSize,
+                                             _cellSize);
+                    }
                 }
             }
         }
@@ -120,10 +123,10 @@ namespace SokobanNET
 
         private void GoToLevel(int levelNumber)
         {
-            _sokoban.LoadLevel(_levels[levelNumber]);
+            _sokoban.LoadLevel(_levelCollection[levelNumber]);
             
-            drawingArea.Width = _levels[levelNumber].Width * _cellSize;
-            drawingArea.Height = _levels[levelNumber].Height * _cellSize;
+            drawingArea.Width = _levelCollection[levelNumber].Width * _cellSize;
+            drawingArea.Height = _levelCollection[levelNumber].Height * _cellSize;
 
             // some code to resize the form to fit the level size, and also to center the level in the form
             int formNewWidth = drawingArea.Width > _defaultBackgroundPanelWidth
@@ -164,7 +167,6 @@ namespace SokobanNET
         private void UndoMovement()
         {
             _sokoban.UndoMovement();
-            drawingArea.Invalidate();
         }
 
         private void changeLevelMenuItem_Click(object sender, EventArgs e)
@@ -172,7 +174,7 @@ namespace SokobanNET
             ChangeLevelForm changeLevelForm = new ChangeLevelForm();
             if (changeLevelForm.ShowDialog() == DialogResult.OK)
             {
-                _levels = changeLevelForm.SelectedCollection;
+                _levelCollection = changeLevelForm.SelectedCollection;
                 _currentLevel = changeLevelForm.SelectedLevel;
 
                 GoToLevel(_currentLevel);

@@ -16,7 +16,10 @@ namespace SokobanNET
         public int SelectedLevel { get; private set; }
 
         private Sokoban _sokoban;
+
         private int _cellSize;
+        private int _paddingX;
+        private int _paddingY;
 
         public ChangeLevelForm()
         {
@@ -59,44 +62,48 @@ namespace SokobanNET
 
         private void levelsGrid_SelectionChanged(object sender, EventArgs e)
         {
-            SelectedLevel = levelsGrid.CurrentRow.Index + 1;
+            SelectedLevel = levelsGrid.CurrentRow.Index;
 
             LevelCollection selectedLevelCollection = (LevelCollection)levelCollectionGrid.CurrentRow.DataBoundItem;
-            _sokoban.LoadLevel(selectedLevelCollection[SelectedLevel - 1]);
+            _sokoban.LoadLevel(selectedLevelCollection[SelectedLevel]);
 
             _cellSize = levelPreview.Width / Math.Max(_sokoban.Width, _sokoban.Height);
+            _paddingX = (levelPreview.Width - (_sokoban.Width * _cellSize)) / 2;
+            _paddingY = (levelPreview.Height - (_sokoban.Height * _cellSize)) / 2;
 
             levelPreview.Invalidate();
         }
 
         private void levelPreview_Paint(object sender, PaintEventArgs e)
         {           
-            int y = 0;
-            int x = 0;
-            foreach (Sokoban.Element element in _sokoban)
+            foreach (Element element in _sokoban)
             {
-                switch (element)
+                Bitmap imageToDraw = null;
+
+                switch (element.Type)
                 {
-                    case Sokoban.Element.Wall:
-                        e.Graphics.DrawImage(Properties.Resources.Wall, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+                    case ElementType.Wall:
+                        imageToDraw = Properties.Resources.Wall;
                         break;
-                    case Sokoban.Element.Box:
-                    case Sokoban.Element.BoxOnGoal:
-                        e.Graphics.DrawImage(Properties.Resources.Box, x * _cellSize, y * _cellSize, _cellSize, _cellSize);  
+                    case ElementType.Box:
+                    case ElementType.BoxOnGoal:
+                        imageToDraw = Properties.Resources.Box;
                         break;
-                    case Sokoban.Element.Goal:
-                        e.Graphics.DrawImage(Properties.Resources.Goal, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
+                    case ElementType.Goal:
+                        imageToDraw = Properties.Resources.Goal;
                         break;
-                    case Sokoban.Element.Player:
-                    case Sokoban.Element.PlayerOnGoal:
-                        e.Graphics.DrawImage(Properties.Resources.Player, x * _cellSize, y * _cellSize, _cellSize, _cellSize);
-                        break;
-                    case Sokoban.Element.EndRow:
-                        x = -1;
-                        y++;
+                    case ElementType.Player:
+                    case ElementType.PlayerOnGoal:
+                        imageToDraw = Properties.Resources.Player;
                         break;
                 }
-                x++;
+
+                if (imageToDraw != null)
+                {
+                    e.Graphics.DrawImage(imageToDraw, _paddingX + element.Column * _cellSize,
+                                         _paddingY + element.Row * _cellSize,
+                                         _cellSize, _cellSize);
+                }
             }
         }
     }
