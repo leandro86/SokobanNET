@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using SokobanLogic;
 
 namespace SokobanNET
 {
@@ -43,6 +44,11 @@ namespace SokobanNET
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
+            if (_levelCollection == null)
+            {
+                return;
+            }
+            
             if (_isLevelComplete)
             {
                 if (e.KeyCode == Keys.Enter)
@@ -167,6 +173,7 @@ namespace SokobanNET
         private void UndoMovement()
         {
             _sokoban.UndoMovement();
+            drawingArea.Invalidate();
         }
 
         private void changeLevelMenuItem_Click(object sender, EventArgs e)
@@ -180,6 +187,8 @@ namespace SokobanNET
                 GoToLevel(_currentLevel);
 
                 drawingArea.Visible = true;
+                restartMenuItem.Enabled = true;
+                undoMenuItem.Enabled = true;
             }
         }
     }

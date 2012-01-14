@@ -1,14 +1,14 @@
-﻿﻿using System;
+﻿using System;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace SokobanNET
+namespace SokobanLogic
 {
     public class LevelCollection
     {
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public string Copyright { get; private set; }
+        public string Author { get; private set; }
         public int NumberOfLevels { get; private set; }
         
         private XDocument _levelsFile;
@@ -33,7 +33,7 @@ namespace SokobanNET
 
             Title = _levelsFile.Root.Element("Title").Value;
             Description = _levelsFile.Root.Element("Description").Value.Trim();
-            Copyright = _levelsFile.Root.Element("LevelCollection").Attribute("Copyright").Value;
+            Author = _levelsFile.Root.Element("LevelCollection").Attribute("Copyright").Value;
             NumberOfLevels = _levelsFile.Descendants("Level").Count();
         }
 

@@ -52,10 +52,6 @@
     <Compile Include="ChangeLevelForm.Designer.cs">
       <DependentUpon>ChangeLevelForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Element.cs" />
-    <Compile Include="ElementType.cs" />
-    <Compile Include="Level.cs" />
-    <Compile Include="LevelCollection.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,7 +60,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sokoban.cs" />
     <EmbeddedResource Include="ChangeLevelForm.resx">
       <DependentUpon>ChangeLevelForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -81,6 +76,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Levels\Novoban.slc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Levels\Original.slc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -109,7 +107,12 @@
   <ItemGroup>
     <None Include="Resources\Wall.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SokobanLogic\SokobanLogic.csproj">
+      <Project>{7809C17C-AD3B-4861-89F5-414F054CC68C}</Project>
+      <Name>SokobanLogic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

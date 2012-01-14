@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SokobanNET
+namespace SokobanLogic
 {
     public class Sokoban : IEnumerable
     {
@@ -201,6 +201,16 @@ namespace SokobanNET
 
                 foreach (var element in elementsList)
                 {
+                    if (element.Type == ElementType.BoxOnGoal)
+                    {
+                        _goalsFilled++;
+                    }
+                    else if (element.Type == ElementType.Goal && 
+                             _level[element.Row][element.Column].Type == ElementType.BoxOnGoal)
+                    {
+                        _goalsFilled--;
+                    }
+
                     _level[element.Row][element.Column].Type = element.Type;
                 }
 

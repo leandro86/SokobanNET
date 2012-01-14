@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SokobanLogic;
 
 namespace SokobanNET
 {
@@ -42,7 +43,7 @@ namespace SokobanNET
             levelCollectionGrid.DataSource = levels;
             
             levelCollectionGrid.Columns["title"].DataPropertyName = "Title";
-            levelCollectionGrid.Columns["copyright"].DataPropertyName = "Copyright";
+            levelCollectionGrid.Columns["author"].DataPropertyName = "Author";
             levelCollectionGrid.Columns["levels"].DataPropertyName = "NumberOfLevels";
         }
 
