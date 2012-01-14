@@ -33,13 +33,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.levelCollectionGrid = new System.Windows.Forms.DataGridView();
             this.levelsGrid = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levelPreview = new System.Windows.Forms.PictureBox();
             this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.author = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levels = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.completed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.levelCollectionGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelPreview)).BeginInit();
@@ -84,8 +82,7 @@
             this.levelCollectionGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.title,
             this.author,
-            this.levels,
-            this.completed});
+            this.levels});
             this.levelCollectionGrid.Location = new System.Drawing.Point(12, 12);
             this.levelCollectionGrid.MultiSelect = false;
             this.levelCollectionGrid.Name = "levelCollectionGrid";
@@ -104,33 +101,16 @@
             this.levelsGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.levelsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.levelsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.Column4});
-            this.levelsGrid.Location = new System.Drawing.Point(431, 12);
+            this.dataGridViewTextBoxColumn1});
+            this.levelsGrid.Location = new System.Drawing.Point(433, 12);
             this.levelsGrid.MultiSelect = false;
             this.levelsGrid.Name = "levelsGrid";
             this.levelsGrid.ReadOnly = true;
             this.levelsGrid.RowHeadersVisible = false;
             this.levelsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.levelsGrid.Size = new System.Drawing.Size(134, 126);
+            this.levelsGrid.Size = new System.Drawing.Size(132, 126);
             this.levelsGrid.TabIndex = 6;
             this.levelsGrid.SelectionChanged += new System.EventHandler(this.levelsGrid_SelectionChanged);
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.FillWeight = 149.2386F;
-            this.dataGridViewTextBoxColumn1.HeaderText = "Level";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.ReadOnly = true;
-            this.dataGridViewTextBoxColumn1.Width = 70;
-            // 
-            // Column4
-            // 
-            this.Column4.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column4.FillWeight = 50.76142F;
-            this.Column4.HeaderText = "Completed";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             // 
             // levelPreview
             // 
@@ -148,14 +128,14 @@
             this.title.HeaderText = "Title";
             this.title.Name = "title";
             this.title.ReadOnly = true;
-            this.title.Width = 170;
+            this.title.Width = 200;
             // 
             // author
             // 
+            this.author.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.author.HeaderText = "Author";
             this.author.Name = "author";
             this.author.ReadOnly = true;
-            this.author.Width = 130;
             // 
             // levels
             // 
@@ -164,12 +144,13 @@
             this.levels.ReadOnly = true;
             this.levels.Width = 50;
             // 
-            // completed
+            // dataGridViewTextBoxColumn1
             // 
-            this.completed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.completed.HeaderText = "Completed";
-            this.completed.Name = "completed";
-            this.completed.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridViewTextBoxColumn1.FillWeight = 149.2386F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "Level";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // ChangeLevelForm
             // 
@@ -200,12 +181,10 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.DataGridView levelCollectionGrid;
         private System.Windows.Forms.DataGridView levelsGrid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.PictureBox levelPreview;
         private System.Windows.Forms.DataGridViewTextBoxColumn title;
         private System.Windows.Forms.DataGridViewTextBoxColumn author;
         private System.Windows.Forms.DataGridViewTextBoxColumn levels;
-        private System.Windows.Forms.DataGridViewTextBoxColumn completed;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     }
 }

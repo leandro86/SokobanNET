@@ -124,11 +124,19 @@ namespace SokobanNET
             drawingArea.Invalidate();
 
             _isLevelComplete = true;
+            undoMenuItem.Enabled = false;
             statusBarLabel.Text = "Level Completed! Press enter to go to the next level...";
         }
 
         private void GoToLevel(int levelNumber)
         {
+            if (_currentLevel == _levelCollection.NumberOfLevels)
+            {
+                statusBarLabel.Text = "No more levels in the collection";
+                _currentLevel--;
+                return;
+            }
+            
             _sokoban.LoadLevel(_levelCollection[levelNumber]);
             
             drawingArea.Width = _levelCollection[levelNumber].Width * _cellSize;
@@ -153,6 +161,10 @@ namespace SokobanNET
             statusBarLabel.Text = "";
 
             drawingArea.Invalidate();
+
+            drawingArea.Visible = true;
+            restartMenuItem.Enabled = true;
+            undoMenuItem.Enabled = true;
         }
 
         private void restartMenuItem_Click(object sender, EventArgs e)
@@ -185,10 +197,6 @@ namespace SokobanNET
                 _currentLevel = changeLevelForm.SelectedLevel;
 
                 GoToLevel(_currentLevel);
-
-                drawingArea.Visible = true;
-                restartMenuItem.Enabled = true;
-                undoMenuItem.Enabled = true;
             }
         }
     }

@@ -32,7 +32,7 @@ namespace SokobanLogic
             }
 
             Title = _levelsFile.Root.Element("Title").Value;
-            Description = _levelsFile.Root.Element("Description").Value.Trim();
+            Description = _levelsFile.Root.Element("Description").Value.Replace("\n", " ").Trim();
             Author = _levelsFile.Root.Element("LevelCollection").Attribute("Copyright").Value;
             NumberOfLevels = _levelsFile.Descendants("Level").Count();
         }
