@@ -32,12 +32,12 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.levelCollectionGrid = new System.Windows.Forms.DataGridView();
-            this.levelsGrid = new System.Windows.Forms.DataGridView();
-            this.levelPreview = new System.Windows.Forms.PictureBox();
             this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.author = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.levels = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelsGrid = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelPreview = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.levelCollectionGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelsGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelPreview)).BeginInit();
@@ -93,36 +93,6 @@
             this.levelCollectionGrid.TabIndex = 5;
             this.levelCollectionGrid.SelectionChanged += new System.EventHandler(this.levelCollectionGrid_SelectionChanged);
             // 
-            // levelsGrid
-            // 
-            this.levelsGrid.AllowUserToAddRows = false;
-            this.levelsGrid.AllowUserToDeleteRows = false;
-            this.levelsGrid.AllowUserToResizeRows = false;
-            this.levelsGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.levelsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.levelsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1});
-            this.levelsGrid.Location = new System.Drawing.Point(433, 12);
-            this.levelsGrid.MultiSelect = false;
-            this.levelsGrid.Name = "levelsGrid";
-            this.levelsGrid.ReadOnly = true;
-            this.levelsGrid.RowHeadersVisible = false;
-            this.levelsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.levelsGrid.Size = new System.Drawing.Size(132, 126);
-            this.levelsGrid.TabIndex = 6;
-            this.levelsGrid.SelectionChanged += new System.EventHandler(this.levelsGrid_SelectionChanged);
-            // 
-            // levelPreview
-            // 
-            this.levelPreview.BackgroundImage = global::SokobanNET.Properties.Resources.Floor;
-            this.levelPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.levelPreview.Location = new System.Drawing.Point(431, 142);
-            this.levelPreview.Name = "levelPreview";
-            this.levelPreview.Size = new System.Drawing.Size(134, 134);
-            this.levelPreview.TabIndex = 7;
-            this.levelPreview.TabStop = false;
-            this.levelPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.levelPreview_Paint);
-            // 
             // title
             // 
             this.title.HeaderText = "Title";
@@ -144,6 +114,25 @@
             this.levels.ReadOnly = true;
             this.levels.Width = 50;
             // 
+            // levelsGrid
+            // 
+            this.levelsGrid.AllowUserToAddRows = false;
+            this.levelsGrid.AllowUserToDeleteRows = false;
+            this.levelsGrid.AllowUserToResizeRows = false;
+            this.levelsGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.levelsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.levelsGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1});
+            this.levelsGrid.Location = new System.Drawing.Point(433, 12);
+            this.levelsGrid.MultiSelect = false;
+            this.levelsGrid.Name = "levelsGrid";
+            this.levelsGrid.ReadOnly = true;
+            this.levelsGrid.RowHeadersVisible = false;
+            this.levelsGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.levelsGrid.Size = new System.Drawing.Size(132, 126);
+            this.levelsGrid.TabIndex = 6;
+            this.levelsGrid.SelectionChanged += new System.EventHandler(this.levelsGrid_SelectionChanged);
+            // 
             // dataGridViewTextBoxColumn1
             // 
             this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
@@ -151,6 +140,17 @@
             this.dataGridViewTextBoxColumn1.HeaderText = "Level";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            // 
+            // levelPreview
+            // 
+            this.levelPreview.BackgroundImage = global::SokobanNET.Properties.Resources.Floor;
+            this.levelPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.levelPreview.Location = new System.Drawing.Point(431, 142);
+            this.levelPreview.Name = "levelPreview";
+            this.levelPreview.Size = new System.Drawing.Size(134, 134);
+            this.levelPreview.TabIndex = 7;
+            this.levelPreview.TabStop = false;
+            this.levelPreview.Paint += new System.Windows.Forms.PaintEventHandler(this.levelPreview_Paint);
             // 
             // ChangeLevelForm
             // 
@@ -165,7 +165,7 @@
             this.Controls.Add(this.levelCollectionDescriptionText);
             this.Name = "ChangeLevelForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ChangeLevelForm";
+            this.Text = "SokobanNET";
             this.Load += new System.EventHandler(this.ChangeLevelForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.levelCollectionGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.levelsGrid)).EndInit();

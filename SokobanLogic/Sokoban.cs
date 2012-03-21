@@ -8,6 +8,7 @@ namespace SokobanLogic
     {
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public int MovesHistoryCount { get { return _movesHistory.Count; } }
 
         public enum MoveDirection
         {
@@ -89,13 +90,15 @@ namespace SokobanLogic
             _movesHistory.Clear();
         }
 
-        public void MovePlayer(MoveDirection moveDirection)
+        public bool MovePlayer(MoveDirection moveDirection)
         {
             int newPlayerRow = _player.Row;
             int newPlayerColumn = _player.Column;
 
             int newBoxRow = newPlayerRow;
             int newBoxColumn = newPlayerColumn;
+
+            bool hasMoved = false;
 
             switch (moveDirection)
             {
@@ -128,27 +131,15 @@ namespace SokobanLogic
             if (!isThereAWall && !(isTryingToMoveABox && !canMoveBox))
             {
                 List<Element> elementsList = new List<Element>()
-                                                 {
-                                                     new Element()
-                                                         {
-                                                             Type = _level[_player.Row][_player.Column].Type,
-                                                             Row = _player.Row,
-                                                             Column = _player.Column
-                                                         },
-                                                     new Element()
-                                                         {
-                                                             Type = _level[newPlayerRow][newPlayerColumn].Type,
-                                                             Row = newPlayerRow,
-                                                             Column = newPlayerColumn
-                                                         }
-                                                 };
+                {
+                    new Element() {Type = _level[_player.Row][_player.Column].Type, Row = _player.Row, Column = _player.Column},
+                    new Element() {Type = _level[newPlayerRow][newPlayerColumn].Type, Row = newPlayerRow, Column = newPlayerColumn}
+                };
 
-                _level[_player.Row][_player.Column].Type = _level[_player.Row][_player.Column].Type ==
-                                                           ElementType.PlayerOnGoal
-                                                               ? ElementType.Goal
-                                                               : ElementType.Floor;
+                _level[_player.Row][_player.Column].Type = _level[_player.Row][_player.Column].Type == ElementType.PlayerOnGoal ? ElementType.Goal
+                                                                                                                                : ElementType.Floor;
 
-                if (_level[newPlayerRow][newPlayerColumn].Type == ElementType.Goal ||
+                if (_level[newPlayerRow][newPlayerColumn].Type == ElementType.Goal || 
                     _level[newPlayerRow][newPlayerColumn].Type == ElementType.BoxOnGoal)
                 {
                     if (_level[newPlayerRow][newPlayerColumn].Type == ElementType.BoxOnGoal)
@@ -165,12 +156,7 @@ namespace SokobanLogic
 
                 if (isTryingToMoveABox)
                 {
-                    elementsList.Add(new Element()
-                                         {
-                                             Type = _level[newBoxRow][newBoxColumn].Type,
-                                             Row = newBoxRow,
-                                             Column = newBoxColumn
-                                         });
+                    elementsList.Add(new Element() {Type = _level[newBoxRow][newBoxColumn].Type, Row = newBoxRow, Column = newBoxColumn});
 
                     if (_level[newBoxRow][newBoxColumn].Type == ElementType.Goal)
                     {
@@ -190,7 +176,9 @@ namespace SokobanLogic
 
                 _player = _level[newPlayerRow][newPlayerColumn];
                 _movesHistory.Push(elementsList);
+                hasMoved = true;
             }
+            return hasMoved;            
         }
 
         public void UndoMovement()

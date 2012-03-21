@@ -22,6 +22,7 @@ namespace SokobanNET
         private readonly int _defaultBackgroundPanelHeight;
 
         private bool _isLevelComplete;
+        private bool _isLastLevel;
 
         public MainForm()
         {
@@ -37,7 +38,7 @@ namespace SokobanNET
         private void MainForm_Load(object sender, EventArgs e)
         {
             _sokoban = new Sokoban();
-            _sokoban.LevelCompleted += new EventHandler(sokoban_LevelCompleted);
+            _sokoban.LevelCompleted += new EventHandler(OnLevelCompleted);
 
             //GoToLevel(++_currentLevel);
         }
@@ -51,35 +52,44 @@ namespace SokobanNET
             
             if (_isLevelComplete)
             {
-                if (e.KeyCode == Keys.Enter)
+                if (!_isLastLevel && e.KeyCode == Keys.Enter)
                 {
-                    GoToLevel(++_currentLevel);
+                    GoToLevel(_currentLevel + 1);
                 }
             }
             else
             {
+                bool hasMoved = false;   
+             
                 switch (e.KeyCode)
                 {
-                    case Keys.Up:
-                        _sokoban.MovePlayer(Sokoban.MoveDirection.Up);
+                    case Keys.Up:    
+                        hasMoved = _sokoban.MovePlayer(Sokoban.MoveDirection.Up);
                         break;
                     case Keys.Down:
-                        _sokoban.MovePlayer(Sokoban.MoveDirection.Down);
+                        hasMoved = _sokoban.MovePlayer(Sokoban.MoveDirection.Down);
                         break;
                     case Keys.Right:
-                        _sokoban.MovePlayer(Sokoban.MoveDirection.Right);
+                        hasMoved = _sokoban.MovePlayer(Sokoban.MoveDirection.Right);
                         break;
                     case Keys.Left:
-                        _sokoban.MovePlayer(Sokoban.MoveDirection.Left);
+                        hasMoved = _sokoban.MovePlayer(Sokoban.MoveDirection.Left);
                         break;
                     case Keys.Space:
                         // for testing...
-                        GoToLevel(++_currentLevel);
+                        GoToLevel(_currentLevel + 1);
                         break;
                     case Keys.Back:
                         UndoMovement();
                         break;
                 }
+
+                if (hasMoved)
+                {
+                    undoMenuItem.Enabled = true;
+                    undoButton.Enabled = true;
+                }
+
                 drawingArea.Invalidate();
             }
         }
@@ -119,25 +129,29 @@ namespace SokobanNET
             }
         }
 
-        private void sokoban_LevelCompleted(object sender, EventArgs e)
+        private void OnLevelCompleted(object sender, EventArgs e)
         {
-            drawingArea.Invalidate();
-
             _isLevelComplete = true;
             undoMenuItem.Enabled = false;
-            statusBarLabel.Text = "Level Completed! Press enter to go to the next level...";
+            undoButton.Enabled = false;
+
+            if (_currentLevel + 1 == _levelCollection.NumberOfLevels)
+            {
+                statusLabel.Text = "Level Completed! No more levels in the collection.";
+                _isLastLevel = true;
+            }
+            else
+            {
+                statusLabel.Text = "Level Completed! Press enter to go to the next level...";
+            }            
+
+            drawingArea.Invalidate();
         }
 
         private void GoToLevel(int levelNumber)
-        {
-            if (_currentLevel == _levelCollection.NumberOfLevels)
-            {
-                statusBarLabel.Text = "No more levels in the collection";
-                _currentLevel--;
-                return;
-            }
-            
+        {           
             _sokoban.LoadLevel(_levelCollection[levelNumber]);
+            _currentLevel = levelNumber;
             
             drawingArea.Width = _levelCollection[levelNumber].Width * _cellSize;
             drawingArea.Height = _levelCollection[levelNumber].Height * _cellSize;
@@ -158,23 +172,28 @@ namespace SokobanNET
             drawingArea.Location = new Point(x, y);
 
             _isLevelComplete = false;
-            statusBarLabel.Text = "";
+
+            statusLabel.Text = "Playing";
+            levelCollectionLabel.Text = _levelCollection.Title;
+            levelLabel.Text = string.Format("{0} of {1}", _currentLevel + 1, _levelCollection.NumberOfLevels);
+            
+            restartMenuItem.Enabled = true;
+            restartButton.Enabled = true;
+            undoMenuItem.Enabled = false;
+            undoButton.Enabled = false;
 
             drawingArea.Invalidate();
-
-            drawingArea.Visible = true;
-            restartMenuItem.Enabled = true;
-            undoMenuItem.Enabled = true;
+            drawingArea.Visible = true;            
         }
 
         private void restartMenuItem_Click(object sender, EventArgs e)
         {
-            GoToLevel(_currentLevel);
+            RestartLevel();
         }
 
-        private void exitMenuItem_Click(object sender, EventArgs e)
+        private void RestartLevel()
         {
-            Close();
+            GoToLevel(_currentLevel);
         }
 
         private void undoMenuItem_Click(object sender, EventArgs e)
@@ -185,6 +204,9 @@ namespace SokobanNET
         private void UndoMovement()
         {
             _sokoban.UndoMovement();
+            undoMenuItem.Enabled = _sokoban.MovesHistoryCount > 0;
+            undoButton.Enabled = _sokoban.MovesHistoryCount > 0;
+
             drawingArea.Invalidate();
         }
 
@@ -194,10 +216,23 @@ namespace SokobanNET
             if (changeLevelForm.ShowDialog() == DialogResult.OK)
             {
                 _levelCollection = changeLevelForm.SelectedCollection;
-                _currentLevel = changeLevelForm.SelectedLevel;
-
-                GoToLevel(_currentLevel);
+                GoToLevel(changeLevelForm.SelectedLevel);
             }
+        }
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void restartButton_Click(object sender, EventArgs e)
+        {
+            RestartLevel();
+        }
+
+        private void undoButton_Click(object sender, EventArgs e)
+        {
+            UndoMovement();
         }
     }
 }
